@@ -19,7 +19,8 @@ type TileProps = {
 export function Tile({ position, ...props }: TileProps) {
   const { level } = useLevelEditor();
   const isStart = isPositionEqual(level.owlStart.position, position);
-  const isFinish = level.finishPosition && isPositionEqual(level.finishPosition, position);
+  const isFinish =
+    level.finishPosition && isPositionEqual(level.finishPosition, position);
   return (
     <Button
       variant="none"

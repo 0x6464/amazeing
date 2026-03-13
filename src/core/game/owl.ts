@@ -44,14 +44,6 @@ export class Owl {
   }
 
   /**
-   * Get the position in front of the owl based on its current direction.
-   */
-  private nextPosition(data: OwlData): Position {
-    const { position, direction } = data;
-    return inDirection(position, direction);
-  }
-
-  /**
    * Turn the owl left or right.
    * @param direction The direction to turn (left or right).
    */
@@ -87,6 +79,14 @@ export class Owl {
       case "here":
         return "here";
     }
+  }
+
+  /**
+   * Get the position in front of the owl based on its current direction.
+   */
+  private nextPosition(data: OwlData): Position {
+    const { position, direction } = data;
+    return inDirection(position, direction);
   }
 
   private normalizeLeftRight(

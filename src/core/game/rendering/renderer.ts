@@ -198,13 +198,7 @@ export class Renderer {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(angle);
-    ctx.drawImage(
-      img,
-      -img.width / 2,
-      -img.height / 2,
-      img.width,
-      img.height,
-    );
+    ctx.drawImage(img, -img.width / 2, -img.height / 2, img.width, img.height);
     ctx.restore();
   }
 

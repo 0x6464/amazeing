@@ -9,9 +9,12 @@ export type TasksAPI = {
   partiallyCompletedTasks: Record<string, EvaluatedConstraint[]>;
   completedTasks: string[];
   setCompleted(taskId: string, completed: boolean): void;
-  setPartiallyCompleted(taskId: string, constraints: EvaluatedConstraint[] | false): void;
+  setPartiallyCompleted(
+    taskId: string,
+    constraints: EvaluatedConstraint[] | false,
+  ): void;
   days: Day[];
-}
+};
 
 export const TasksContext = createContext<TasksAPI | null>(null);
 

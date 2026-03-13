@@ -12,12 +12,14 @@ export function TaskView() {
   const dayTitle = translateDayId(t, task.dayId);
   const taskNumber = t("day.task", { num: task.taskNumber });
   const day = days.find((d) => d.id === task.dayId)!;
-  const completedTasksInDay =
-    day.tasks.filter((t) => completedTasks.includes(t.id)).length;
-  const partiallyCompletedTasksInDay =
-    day.tasks.filter((t) => partiallyCompletedTasks[t.id] !== undefined).length;
-  const constraints: EvaluatedConstraint[] = partiallyCompletedTasks[task.id] ||
-    task.constraints || [];
+  const completedTasksInDay = day.tasks.filter((t) =>
+    completedTasks.includes(t.id),
+  ).length;
+  const partiallyCompletedTasksInDay = day.tasks.filter(
+    (t) => partiallyCompletedTasks[t.id] !== undefined,
+  ).length;
+  const constraints: EvaluatedConstraint[] =
+    partiallyCompletedTasks[task.id] || task.constraints || [];
   return (
     <>
       <div className={styles.currentTaskContainer}>
@@ -44,16 +46,18 @@ export function TaskView() {
                     key={i}
                     className={clsx(
                       styles.constraint,
-                      (constraint.met || completedTasks.includes(task.id)) && styles.constraintMet,
+                      (constraint.met || completedTasks.includes(task.id)) &&
+                        styles.constraintMet,
                       // This could also be undefined if the constraint hasn't been evaluated yet
                       constraint.met === false && styles.constraintUnmet,
                     )}
                   >
                     {t(`constraints.${constraint.type}`, {
                       ...constraint,
-                      allowed: constraint.type === "allowed-instructions"
-                        ? constraint.allowed.join(", ")
-                        : undefined,
+                      allowed:
+                        constraint.type === "allowed-instructions"
+                          ? constraint.allowed.join(", ")
+                          : undefined,
                     })}
                   </li>
                 ))}

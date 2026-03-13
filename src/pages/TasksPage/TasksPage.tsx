@@ -30,7 +30,8 @@ export function TasksPage() {
 
 // Wrapper to access tasks context
 function EditorWrapper() {
-  const { task, completedTasks, setCompleted, setPartiallyCompleted } = useTasks();
+  const { task, completedTasks, setCompleted, setPartiallyCompleted } =
+    useTasks();
   const level = useMemo(() => new Level(task.levelData), [task.levelData]);
   const [, setSearchParams] = useSearchParams();
 
