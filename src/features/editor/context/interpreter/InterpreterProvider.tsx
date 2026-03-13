@@ -82,6 +82,13 @@ export function InterpreterProvider({
     markDataRef.current = newMarks;
     setMarkData(newMarks);
   }, []);
+  
+  // Update marks when level changes to reset them
+  useEffect(() => {
+    const newMarks = emptyMarks(level.data.maze.width, level.data.maze.height);
+    markDataRef.current = newMarks;
+    setMarkData(newMarks);
+  }, [level]);
 
   // Refs
   const interpreterRef = useRef<Interpreter | null>(null);
@@ -124,6 +131,7 @@ export function InterpreterProvider({
       const newOwlData = level.createOwlData();
       updateOwl(newOwlData);
       setOutput([]);
+      setMarkData(emptyMarks(level.data.maze.width, level.data.maze.height));
       const interpreter = LazyInterpreter.fromCode(
         code,
         new InterpreterConsoleImpl(appendOutput),
