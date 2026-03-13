@@ -5,7 +5,7 @@
   },
   "description": {
     "en": "Fix the problems with the Right-Hand Rule by implementing the Pledge algorithm. Please have a look at the sheets for the pseudo code!",
-    "de": "Fix the problems with the Right-Hand Rule by implementing the Pledge algorithm. Please have a look at the sheets for the pseudo code!"
+    "de": "Behebe die Probleme mit der Rechte-Hand-Regel, indem du den Pledge-Algorithmus implementierst. Bitte schau dir die Blätter für den Pseudo-Code an!"
   },
   "levelData": {
     "maze": {

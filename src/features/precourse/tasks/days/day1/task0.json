@@ -68,5 +68,14 @@
       },
       "direction": "north"
     }
-  }
+  },
+  "constraints": [
+    {
+      "type": "allowed-instructions",
+      "allowed": [
+        "move",
+        "turn"
+      ]
+    }
+  ]
 }

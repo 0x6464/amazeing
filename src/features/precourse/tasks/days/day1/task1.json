@@ -96,5 +96,25 @@
       },
       "direction": "north"
     }
-  }
+  },
+  "constraints": [
+    {
+      "type": "max-instruction-count",
+      "instruction": "move",
+      "count": 1
+    },
+    {
+      "type": "max-instruction-count",
+      "instruction": "jump",
+      "count": 1
+    },
+    {
+      "type": "allowed-instructions",
+      "allowed": [
+        "move",
+        "jump",
+        "turn"
+      ]
+    }
+  ]
 }
