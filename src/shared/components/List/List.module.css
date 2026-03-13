@@ -24,6 +24,7 @@
   color: var(--text-color-t60);
   user-select: none;
   -webkit-user-select: none;
+  overflow: hidden;
 }
 
 .elementName {
