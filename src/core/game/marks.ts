@@ -21,6 +21,17 @@ export class Marks {
     this.markInternal(position, direction, false);
   }
 
+  getMarkAt(position: Position) {
+    return this.data().marks?.[position.y]?.[position.x];
+  }
+
+  setMarkAt(position: Position, value: number) {
+    const marks = this.data().marks;
+    const newMarks = marks.map((row) => row.map((mark) => mark));
+    newMarks[position.y][position.x] = value;
+    this.setData({ marks: newMarks });
+  }
+
   private markInternal(
     position: Position,
     direction: CardinalDirection | "here",
@@ -50,17 +61,6 @@ export class Marks {
     } else {
       this.setMarkAt(position, currentMark & ~mask);
     }
-  }
-
-  getMarkAt(position: Position) {
-    return this.data().marks?.[position.y]?.[position.x];
-  }
-
-  setMarkAt(position: Position, value: number) {
-    const marks = this.data().marks;
-    const newMarks = marks.map((row) => row.map((mark) => mark));
-    newMarks[position.y][position.x] = value;
-    this.setData({ marks: newMarks });
   }
 }
 

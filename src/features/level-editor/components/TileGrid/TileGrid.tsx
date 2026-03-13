@@ -82,9 +82,11 @@ export function TileGrid() {
                   <Wall
                     wall={maze.walls.vertical[row][col]}
                     onPointerEnter={(evt) =>
-                      onWallInteraction(evt, { x: col, y: row }, false)}
+                      onWallInteraction(evt, { x: col, y: row }, false)
+                    }
                     onPointerDown={(evt) =>
-                      onWallInteraction(evt, { x: col, y: row }, false, true)}
+                      onWallInteraction(evt, { x: col, y: row }, false, true)
+                    }
                   />
                 )}
               </Fragment>
@@ -100,9 +102,11 @@ export function TileGrid() {
                   wall={maze.walls.horizontal[row][col]}
                   horizontal
                   onPointerEnter={(evt) =>
-                    onWallInteraction(evt, { x: col, y: row }, true)}
+                    onWallInteraction(evt, { x: col, y: row }, true)
+                  }
                   onPointerDown={(evt) =>
-                    onWallInteraction(evt, { x: col, y: row }, true, true)}
+                    onWallInteraction(evt, { x: col, y: row }, true, true)
+                  }
                 />
               ))}
             </div>

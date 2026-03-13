@@ -22,7 +22,10 @@ import {
   type MarkData,
   Marks,
 } from "../../../../core/game/marks.ts";
-import type { Constraint, EvaluatedConstraint } from "../../../../core/game/constraints.ts";
+import type {
+  Constraint,
+  EvaluatedConstraint,
+} from "../../../../core/game/constraints.ts";
 import { validateConstraints } from "../../../../core/interpreter/constraints.ts";
 
 const INSTANT_BATCH_SIZE = 500;
@@ -102,7 +105,7 @@ export function InterpreterProvider({
     markDataRef.current = newMarks;
     setMarkData(newMarks);
   }, []);
-  
+
   // Update marks when level changes to reset them
   useEffect(() => {
     const newMarks = emptyMarks(level.data.maze.width, level.data.maze.height);
@@ -168,7 +171,15 @@ export function InterpreterProvider({
         setOutput([{ type: "error", text: e.message }]);
       }
     }
-  }, [appendOutput, code, level, stop, updateOwl, updateMarks, wrappedOnFinish]);
+  }, [
+    appendOutput,
+    code,
+    level,
+    stop,
+    updateOwl,
+    updateMarks,
+    wrappedOnFinish,
+  ]);
 
   const step = useCallback((steps = 1) => {
     interpreterRef.current?.executeAndPrintError((interpreter) => {

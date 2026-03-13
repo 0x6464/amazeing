@@ -12,7 +12,6 @@
   color: var(--text-color);
 }
 
-/*TODO: FIX HTML SCROLL*/
 body, html, #root {
   margin: 0;
   padding: 0;

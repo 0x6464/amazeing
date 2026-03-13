@@ -15,7 +15,11 @@ export function Logo() {
       className={styles.logoLink}
     >
       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-        <img src={logo} alt="Amazeing Logo" className={clsx(styles.logo, isMobile && styles.mobile)} />
+        <img
+          src={logo}
+          alt="Amazeing Logo"
+          className={clsx(styles.logo, isMobile && styles.mobile)}
+        />
       </motion.div>
     </NavBarLink>
   );

@@ -25,9 +25,7 @@ export type InterpreterAPI = {
   isRunning: boolean;
 };
 
-export const InterpreterContext = createContext<InterpreterAPI | null>(
-  null,
-);
+export const InterpreterContext = createContext<InterpreterAPI | null>(null);
 
 export function useInterpreter() {
   const ctx = useContext(InterpreterContext);

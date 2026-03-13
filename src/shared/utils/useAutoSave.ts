@@ -41,8 +41,11 @@ export function useAutoSave<T>(
     (toSave?: T) => {
       toSave = toSave ?? contentRef.current;
       // Use deep equality instead of reference equality for safety
-      if (savedContentRef.current !== null &&
-        JSON.stringify(savedContentRef.current) === JSON.stringify(toSave)) return;
+      if (
+        savedContentRef.current !== null &&
+        JSON.stringify(savedContentRef.current) === JSON.stringify(toSave)
+      )
+        return;
       saveContent(toSave);
       savedContentRef.current = toSave;
     },
@@ -77,6 +80,6 @@ export function useAutoSave<T>(
 
   return {
     saveManually: handleSave,
-    setLastSavedContent ,
+    setLastSavedContent,
   };
 }

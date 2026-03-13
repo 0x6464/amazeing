@@ -56,7 +56,11 @@ export function NavBar() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             {PAGES.map(({ path, title }) => (
-              <NavBarLink to={path} key={path} onClick={() => setMenuOpen(false)}>
+              <NavBarLink
+                to={path}
+                key={path}
+                onClick={() => setMenuOpen(false)}
+              >
                 {t(title)}
               </NavBarLink>
             ))}

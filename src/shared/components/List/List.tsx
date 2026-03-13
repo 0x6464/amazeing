@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import styles from "./List.module.css";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   type CSSProperties,
   type HTMLAttributes,
@@ -39,7 +39,6 @@ type ListProps = {
   nestingLevel?: number;
 } & HTMLAttributes<HTMLDivElement>;
 
-// TODO: Animate groups
 export function List({
   elements,
   openGroupIds = [],
@@ -154,17 +153,25 @@ function GroupElement({
         </div>
       </div>
 
-      {isOpen && (
-        <div className={styles.groupListContainer}>
-          <List
-            elements={group.elements}
-            activeElementId={activeElementId}
-            onSelectElement={onSelectElement}
-            layoutId={layoutId + "-" + group.id}
-            nestingLevel={nestingLevel + 1}
-          />
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            className={styles.groupListContainer}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 50 }}
+          >
+            <List
+              elements={group.elements}
+              activeElementId={activeElementId}
+              onSelectElement={onSelectElement}
+              layoutId={layoutId + "-" + group.id}
+              nestingLevel={nestingLevel + 1}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

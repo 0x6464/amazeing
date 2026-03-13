@@ -3,7 +3,10 @@ import type { PropsWithChildren } from "react";
 import { useCodeModel } from "../code/CodeModelContext.tsx";
 import { useEditorSettings } from "../settings/EditorSettingsContext.tsx";
 import { InterpreterProvider } from "./InterpreterProvider.tsx";
-import type { Constraint, EvaluatedConstraint } from "../../../../core/game/constraints.ts";
+import type {
+  Constraint,
+  EvaluatedConstraint,
+} from "../../../../core/game/constraints.ts";
 
 type InterpreterWrapperProps = {
   level: Level;

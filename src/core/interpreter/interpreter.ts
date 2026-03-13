@@ -189,6 +189,25 @@ export class InterpreterImpl extends Interpreter {
     return this.instructions;
   }
 
+  checkFinish() {
+    if (this.isFinished) return true;
+    if (this.env.level.isFinished(this.env.owl.data())) {
+      this.env.console.log({ type: "success", text: "Level completed!" });
+      this.isLocked = true;
+      this.isFinished = true;
+      this.onFinish?.();
+      return true;
+    } else if (!this.canStep()) {
+      this.env.console.log({
+        type: "system",
+        text: "No more instructions left to execute.",
+      });
+      this.isLocked = true;
+      this.isFinished = false;
+    }
+    return false;
+  }
+
   private executeStep() {
     if (this.steps >= MAX_STEPS) {
       throw new ErrorWithTip(
@@ -221,22 +240,6 @@ export class InterpreterImpl extends Interpreter {
     this.steps++;
     // Check for level completion
     this.checkFinish();
-  }
-
-  checkFinish() {
-    if (this.isFinished) return true;
-    if (this.env.level.isFinished(this.env.owl.data())) {
-      this.env.console.log({ type: "success", text: "Level completed!" });
-      this.isLocked = true;
-      this.isFinished = true;
-      this.onFinish?.();
-      return true;
-    } else if (!this.canStep()) {
-      this.env.console.log({ type: "system", text: "No more instructions left to execute." });
-      this.isLocked = true;
-      this.isFinished = false;
-    }
-    return false;
   }
 
   /**

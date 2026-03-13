@@ -38,10 +38,7 @@ export function ExecutionControls({
     <ButtonGroup>
       {/* Run Controls */}
       {isRunning ? (
-        <Button
-          variant="danger"
-          onClick={stop}
-        >
+        <Button variant="danger" onClick={stop}>
           <VscDebugStop /> {isMobile ? "" : t("editor.stop")}
         </Button>
       ) : (
@@ -50,8 +47,7 @@ export function ExecutionControls({
           disabled={!canStep}
           onClick={run}
         >
-          <VscDebugContinue />{" "}
-          {isMobile ? "" : t("editor.run")}
+          <VscDebugContinue /> {isMobile ? "" : t("editor.run")}
         </Button>
       )}
       <ExecutionSettings />

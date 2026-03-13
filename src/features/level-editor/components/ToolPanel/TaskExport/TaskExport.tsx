@@ -112,16 +112,16 @@ export function TaskExport() {
               </Button>
             }
           >
-          <textarea
-            readOnly
-            value={editorStateJson}
-            style={{
-              height: "300px",
-              fontFamily: "JetBrains Mono, monospace",
-              whiteSpace: "pre",
-              fontSize: "14px",
-            }}
-          />
+            <textarea
+              readOnly
+              value={editorStateJson}
+              style={{
+                height: "300px",
+                fontFamily: "JetBrains Mono, monospace",
+                whiteSpace: "pre",
+                fontSize: "14px",
+              }}
+            />
             <CopyToClipboard content={editorStateJson} />
           </Modal>
         </FormGroup>

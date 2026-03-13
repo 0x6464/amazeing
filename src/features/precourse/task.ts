@@ -26,7 +26,7 @@ export type TaskData = {
   startingCode?: string;
   /**
    * Optional constraints for the task.
-   * 
+   *
    * Constraints are used to add additional requirements to the task, such as a maximum instruction count.
    */
   constraints?: Constraint[];

@@ -103,7 +103,7 @@
   box-shadow: var(--surface-shadow-light);
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
   .cm-completionInfo {
     top: 110% !important;
     left: -3% !important;
