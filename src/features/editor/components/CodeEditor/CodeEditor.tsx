@@ -1,9 +1,10 @@
 import styles from "./CodeEditor.module.css";
 import clsx from "clsx";
 import { CornerGroup } from "../../../../shared/components/CornerGroup/CornerGroup.tsx";
-import ReactCodeMirror, { tooltips } from "@uiw/react-codemirror";
+import ReactCodeMirror, { Prec, tooltips } from "@uiw/react-codemirror";
 import { amazeing } from "../../../../core/amazeing/amazeing.ts";
-import { EditorView } from "@codemirror/view";
+import { EditorView, keymap } from "@codemirror/view";
+import { acceptCompletion } from "@codemirror/autocomplete";
 import { amazeingAutocomplete } from "../../../../core/amazeing/autocomplete/autocomplete.ts";
 import { useCodeEditorSettings } from "../../context/settings/CodeEditorSettingsContext.tsx";
 import { useEditorTheme } from "../../../../shared/theme/EditorThemeContext.tsx";
@@ -75,6 +76,7 @@ export function CodeEditor({
             },
           }),
           EditorView.lineWrapping,
+          Prec.highest(keymap.of([{ key: "Tab", run: acceptCompletion }])),
         ]}
         onChange={(value) => setCode(value)}
         basicSetup={{
