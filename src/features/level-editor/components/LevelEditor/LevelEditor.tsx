@@ -37,6 +37,7 @@ export function LevelEditor() {
               owl={{
                 position: level.owlStart.position,
                 direction: level.owlStart.direction,
+                positionHistory: new Set(),
               }}
               level={new Level(level)}
               lockCamera={false}

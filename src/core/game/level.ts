@@ -24,7 +24,7 @@ export type LevelData = {
     position: Position;
     direction: CardinalDirection;
   };
-  finishPosition: Position;
+  finishPosition?: Position;
 
   /**
    * Task metadata for the level, used for saving task metadata
@@ -54,6 +54,9 @@ export class Level {
     return {
       position: { ...this.data.owlStart.position },
       direction: this.data.owlStart.direction,
+      positionHistory: new Set<string>([
+        `${this.data.owlStart.position.x}:${this.data.owlStart.position.y}`,
+      ]),
     };
   }
 
@@ -66,7 +69,16 @@ export class Level {
     return !wall && hasTile;
   }
 
-  isOwlAtFinish(owl: OwlData): boolean {
+  isFinished(owl: OwlData): boolean {
+    if (!this.data.finishPosition) {
+      // Check if all tiles have been explored, if yes, consider the level finished
+      const reachableTiles = this.maze.getReachableTiles(
+        this.data.owlStart.position,
+      );
+      // We don't actually need to check if all reachable tiles have been touched one-by-one,
+      // Because the positionHistory can only grow when the owl moves to a new tile.
+      return reachableTiles.length === owl.positionHistory.size;
+    };
     return (
       owl.position.x === this.data.finishPosition.x &&
       owl.position.y === this.data.finishPosition.y
@@ -93,10 +105,12 @@ export function resizeLevel(
     },
     direction: level.owlStart.direction,
   };
-  const newFinishPosition = {
-    x: Math.min(level.finishPosition.x, newWidth - 1),
-    y: Math.min(level.finishPosition.y, newHeight - 1),
-  };
+  const newFinishPosition = level.finishPosition
+    ? {
+        x: Math.min(level.finishPosition.x, newWidth - 1),
+        y: Math.min(level.finishPosition.y, newHeight - 1),
+      }
+    : undefined;
   return {
     ...level,
     maze: newMazeData,
