@@ -1,0 +1,17 @@
+.title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.explanation, .constraint {
+  font-size: 14px;
+  color: var(--text-color-t80);
+}
+
+.met {
+  color: var(--clr-success-a10);
+}
+
+.unmet {
+  color: var(--clr-warning-a10);
+}

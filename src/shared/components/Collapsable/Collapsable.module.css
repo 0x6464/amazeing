@@ -1,0 +1,23 @@
+.title {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 4px;
+  color: var(--text-color-t90);
+  font-weight: 500;
+  transition: color .2s;
+}
+
+.title:hover {
+  color: var(--text-color);
+}
+
+.title.open {
+  color: var(--text-color);
+}
+
+.icon {
+  transform-origin: center;
+  width: 16px;
+  height: 18px;
+}

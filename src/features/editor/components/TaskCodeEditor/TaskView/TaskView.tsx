@@ -5,6 +5,7 @@ import { useTasks } from "../../../../precourse/context/TasksContext.tsx";
 import { TaskSelector } from "../TaskSelector/TaskSelector.tsx";
 import clsx from "clsx";
 import type { EvaluatedConstraint } from "../../../../../core/game/constraints.ts";
+import { ConstraintsView } from "./ConstraintsView/ConstraintsView.tsx";
 
 export function TaskView() {
   const { t } = useTranslatable();
@@ -33,36 +34,8 @@ export function TaskView() {
         {task.constraints && (
           <>
             <div className={styles.separator} />
-            <div className={styles.constraints}>
-              <h3 className={styles.constraintsTitle}>
-                {t("taskView.constraints.title")}
-              </h3>
-              <div className={styles.constraintsExplanation}>
-                {t("taskView.constraints.explanation")}
-              </div>
-              <ul className={styles.constraintsList}>
-                {constraints?.map((constraint, i) => (
-                  <li
-                    key={i}
-                    className={clsx(
-                      styles.constraint,
-                      (constraint.met || completedTasks.includes(task.id)) &&
-                        styles.constraintMet,
-                      // This could also be undefined if the constraint hasn't been evaluated yet
-                      constraint.met === false && styles.constraintUnmet,
-                    )}
-                  >
-                    {t(`constraints.${constraint.type}`, {
-                      ...constraint,
-                      allowed:
-                        constraint.type === "allowed-instructions"
-                          ? constraint.allowed.join(", ")
-                          : undefined,
-                    })}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ConstraintsView constraints={constraints} />
+            <div className={styles.separator} />
           </>
         )}
         <div className={styles.dayProgressContainer}>
