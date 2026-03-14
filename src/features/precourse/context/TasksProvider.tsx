@@ -1,6 +1,12 @@
 import { TasksContext } from "./TasksContext.tsx";
-import { type PropsWithChildren, useCallback, useMemo, useState } from "react";
-import { loadDays } from "../day.ts";
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { loadDays, taskIdOf } from "../day.ts";
 import {
   usePersistentState,
   usePersistentStorage,
@@ -10,26 +16,42 @@ import { TaskCompleted } from "../components/TaskCompleted/TaskCompleted.tsx";
 import { useTranslation } from "react-i18next";
 
 type TasksProviderProps = {
-  taskId?: string;
+  taskId: string | null;
   namespace: string;
 };
 
-// TODO: Keep last task in persistent state
-// TODO: Add popup after completing a task
 export function TasksProvider({
   taskId: initialTaskId,
   namespace,
   children,
 }: PropsWithChildren<TasksProviderProps>) {
-  const [taskId, setTaskId] = useState<string | null>(initialTaskId ?? null);
+  const storage = usePersistentStorage(namespace);
+
+  const [taskId, setTaskId] = useState<string | null>(initialTaskId);
+  const [storedTaskId, setStoredTaskId] = usePersistentState<string | null>(
+    storage,
+    "lastTaskId",
+    null,
+  );
+
+  // Memoize data
   const days = useMemo(() => loadDays(), []);
   const task = useMemo(() => {
     const allTasks = days.flatMap((day) => day.tasks);
-    return allTasks.find((t) => t.id === taskId)!;
-  }, [days, taskId]);
+    // Try finding task id given by url param
+    const found = allTasks.find((t) => t.id === taskId);
+    if (found) return found;
+    // Try stored task
+    if (storedTaskId !== null) {
+      const stored = allTasks.find((t) => t.id === storedTaskId);
+      if (stored) return stored;
+    }
+    // Fall back to day 1 task 1
+    const firstDayId = taskIdOf(1, 1);
+    return allTasks.find((t) => t.id === firstDayId)!;
+  }, [days, storedTaskId, taskId]);
 
   // Track completed data
-  const storage = usePersistentStorage(namespace);
   const [completedTasks, setCompletedTasks] = usePersistentState<string[]>(
     storage,
     "completedTasks",
@@ -67,6 +89,12 @@ export function TasksProvider({
     },
     [days, modal, setCompletedTasks, t, task],
   );
+
+  // Update stored task
+  useEffect(() => {
+    if (taskId === null) return;
+    setStoredTaskId(taskId);
+  }, [setStoredTaskId, taskId]);
 
   return (
     <TasksContext.Provider
