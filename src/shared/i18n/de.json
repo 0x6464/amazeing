@@ -147,5 +147,8 @@
   "unmetConstraints.title": "Einschränkungen nicht erfüllt",
   "unmetConstraints.description": "Du hast die Aufgabe gelöst, aber deine Lösung erfüllt nicht die folgenden Einschränkungen:",
   "unmetConstraints.continue": "Was jetzt tun?",
-  "unmetConstraints.checkSolution": "Zurückgehen und Lösung überprüfen"
+  "unmetConstraints.checkSolution": "Zurückgehen und Lösung überprüfen",
+
+  "taskDescription.hint": "Tipp anzeigen",
+  "taskDescription.remark": "Anmerkung anzeigen"
 }

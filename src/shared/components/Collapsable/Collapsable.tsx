@@ -7,6 +7,7 @@ import { Tooltip } from "../../floating/components/Tooltip/Tooltip.tsx";
 
 export type CollapsableProps = {
   title: string | ReactNode | ((open: boolean) => string | ReactNode);
+  color?: string;
   tooltip?: string | ReactNode;
   initialOpen?: boolean;
   children: ReactNode | ((open: boolean) => ReactNode);
@@ -14,6 +15,7 @@ export type CollapsableProps = {
 
 export function Collapsable({
   title,
+  color,
   tooltip,
   children,
   initialOpen = false,
@@ -26,7 +28,10 @@ export function Collapsable({
           className={styles.titleContainer}
           onClick={() => setIsOpen((p) => !p)}
         >
-          <div className={clsx(styles.title, isOpen && styles.open)}>
+          <div
+            className={clsx(styles.title, isOpen && styles.open)}
+            style={{ color }}
+          >
             <div>
               <motion.div
                 className={styles.icon}

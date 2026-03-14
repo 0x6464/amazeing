@@ -147,5 +147,8 @@
   "unmetConstraints.title": "Unmet Constraints",
   "unmetConstraints.description": "You solved the task, but your solution does not meet the following constraints:",
   "unmetConstraints.continue": "What to do now?",
-  "unmetConstraints.checkSolution": "Go back and check your solution"
+  "unmetConstraints.checkSolution": "Go back and check your solution",
+
+  "taskDescription.hint": "Show Hint",
+  "taskDescription.remark": "Show Remark"
 }
