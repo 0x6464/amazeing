@@ -35,7 +35,7 @@ export function TaskCodeEditor({
         content: <TaskView />,
         icon: () => <GrTask />,
         minPixels: [200, 300],
-        initialSizes: [0.7, 0.3],
+        initialSizes: [0.6, 0.4],
       }}
     />
   );
