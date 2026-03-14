@@ -9,7 +9,7 @@ return:
 guess:
   var zero
   load zero 0
-  var direction d
+  var d
   getdir d
   var b
   eq b d east
