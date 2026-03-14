@@ -85,10 +85,12 @@
   "levelEditor.taskExport.taskMeta": "Task Metadata",
   "levelEditor.taskExport.taskMeta.title": "Task Title",
   "levelEditor.taskExport.taskMeta.description": "Task Description",
-  "levelEditor.taskExport.exportJson": "Export Json5",
+  "levelEditor.taskExport.exportJson": "Export Task Json5",
   "levelEditor.taskExport.exportedJson": "Exported Task Json5",
   "levelEditor.taskExport.startingCode": "Starting Code (English Only)",
   "levelEditor.taskExport.other": "Other Options",
+  "levelEditor.levelExport.exportJson": "Export Level Data Json5",
+  "levelEditor.levelExport.exportedJson": "Exported Level Data Json5",
 
   "levelEditor.taskExport.taskMeta.default.title": "Untitled Task",
   "levelEditor.taskExport.taskMeta.default.description": "No description provided.",

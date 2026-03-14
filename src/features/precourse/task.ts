@@ -83,10 +83,29 @@ export function stringifyToTask(level: LevelData): string {
       taskMeta: undefined,
     },
   };
-  let json = JSON5.stringify(task, null, 2);
-  // Indent new lines
-  json = json.replace(/\\n/g, " \\\n      ");
-  return json;
+
+  return JSON5.stringify(task, null, 2);
+}
+
+/**
+ * Stringifies to ready-to-copy levelData one-liner.
+ * @param level The LevelData object to convert.
+ */
+export function stringifyToLevelData(level: LevelData): string {
+  const walls = {
+    horizontal: encode2DBooleanArray(level.maze.walls.horizontal),
+    vertical: encode2DBooleanArray(level.maze.walls.vertical),
+  };
+  const levelData = {
+    ...level,
+    maze: {
+      ...level.maze,
+      walls,
+    },
+    taskMeta: undefined,
+  };
+  const json = JSON5.stringify(levelData, null, 2);
+  return "levelData: " + json;
 }
 
 function reorderLanguageKeys(
