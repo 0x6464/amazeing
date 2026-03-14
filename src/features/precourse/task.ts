@@ -110,6 +110,10 @@ type UnparsedTaskData = Omit<TaskData, "levelData"> & {
   };
 };
 
+/**
+ * Loads a task from a JSON5 string.
+ * @param json json to parse
+ */
 export function loadTaskFromString(json: string): TaskData {
   const parsed = JSON5.parse(json) as UnparsedTaskData | TaskData;
   const horizontalWalls = parsed.levelData.maze.walls.horizontal;
@@ -135,6 +139,7 @@ export function loadTaskFromString(json: string): TaskData {
   };
 }
 
+// We Encode walls as strings to declutter json
 function encode2DBooleanArray(array: boolean[][]): string {
   return array
     .map((row) => row.map((value) => (value ? "1" : "0")).join(""))
