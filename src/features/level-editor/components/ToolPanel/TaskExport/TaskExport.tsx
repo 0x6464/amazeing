@@ -13,7 +13,6 @@ import {
 } from "../../../../../shared/i18n/i18n.ts";
 import { PillSwitch } from "../../../../../shared/components/PillSwitch/PillSwitch.tsx";
 import { useLevelEditor } from "../../../context/LevelEditorContext.tsx";
-import { MiniCodeEditor } from "../../../../editor/components/CodeEditor/MiniCodeEditor/MiniCodeEditor.tsx";
 
 export function TaskExport() {
   const { t } = useTranslation();
@@ -81,28 +80,13 @@ export function TaskExport() {
               }}
               style={{
                 width: "200px",
-                height: "100px",
+                height: "400px",
               }}
             />
           </FormField>
         </FormGroup>
         <h5>{t("levelEditor.taskExport.other")}</h5>
         <FormGroup>
-          <FormField label={t("levelEditor.taskExport.startingCode")}>
-            <MiniCodeEditor
-              code={level.taskMeta?.startingCode ?? ""}
-              setCode={(code) => {
-                setLevel({
-                  ...level,
-                  taskMeta: {
-                    ...level.taskMeta,
-                    startingCode: code,
-                  },
-                });
-              }}
-              editorProps={{ autocomplete: false }}
-            />
-          </FormField>
           <Modal
             title={t("levelEditor.taskExport.exportedJson")}
             trigger={
