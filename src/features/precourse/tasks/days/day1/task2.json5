@@ -4,8 +4,10 @@
     de: 'Geradeaus',
   },
   description: {
-    en: 'In this maze, you only have to go straight ahead. Solve the maze with a single "move" command!       <hint>The "jump" command can be helpful for this.</hint>',
-    de: 'In diesem Labyrinth musst du nur geradeaus gehen. Löse das Labyrinth mit einem einzigen "move" Befehl!       <hint>Der "jump" Befehl kann dir dabei helfen.</hint>',
+    en: 'In this maze, you only have to go straight ahead. Solve the maze with a single "move" command! \
+      <hint>The "jump" command can be helpful for this.</hint>',
+    de: 'In diesem Labyrinth musst du nur geradeaus gehen. Löse das Labyrinth mit einem einzigen "move" Befehl! \
+      <hint>Der "jump" Befehl kann dir dabei helfen.</hint>',
   },
   levelData: {
     maze: {
