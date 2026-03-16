@@ -1,11 +1,13 @@
 {
   title: {
     en: 'Right-Hand Rule',
-    de: 'Right-Hand Rule',
+    de: 'Rechte-Hand-Regel',
   },
   description: {
-    en: 'Please have a look at the sheet for detailed instructions!',
-    de: 'Please have a look at the sheet for detailed instructions!',
+    en: 'Implement the "Right-Hand Rule" algorithm and lead the owl to the goal!<br/> \
+      <remark>Have a look at the exercise sheet for detailed instructions!</remark>',
+    de: 'Implementiere den "Right-Hand Rule"-Algorithmus und führe die Eule zum Ziel!<br/> \
+      <remark>Schau dir das Übungsblatt für detaillierte Anweisungen an!</remark>',
   },
   levelData: {
     maze: {
