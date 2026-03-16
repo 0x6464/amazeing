@@ -3,7 +3,6 @@ import { type LevelData } from "../../core/game/level.ts";
 import {
   type PackagedTranslation,
   SUPPORTED_LANGUAGES,
-  type Translatable,
 } from "../../shared/i18n/i18n.ts";
 import JSON5 from "json5";
 import type { MazeData } from "../../core/game/maze.ts";
@@ -17,10 +16,6 @@ export type TaskData = {
    * The description of the task.
    */
   description: PackagedTranslation;
-  /**
-   * Extra information to be displayed alongside the task's name.
-   */
-  extraInfo?: Translatable;
   /**
    * The level data for the task.
    */

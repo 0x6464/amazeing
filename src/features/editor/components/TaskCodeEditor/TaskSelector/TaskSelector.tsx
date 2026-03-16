@@ -22,7 +22,7 @@ export function TaskSelector() {
               )}
             >
               {t("day.task", { num: task.taskNumber }) +
-                (task.extraInfo ? ` (${t(task.extraInfo)})` : "")}
+                `: ${t(task.title)}`}
             </div>
           ),
         })),
