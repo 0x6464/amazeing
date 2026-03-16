@@ -4,10 +4,8 @@
     de: 'Rechte-Hand-Regel',
   },
   description: {
-    en: 'Implement the "Right-Hand Rule" algorithm and lead the owl to the goal!<br/> \
-      <remark>Have a look at the exercise sheet for detailed instructions!</remark>',
-    de: 'Implementiere den "Right-Hand Rule"-Algorithmus und führe die Eule zum Ziel!<br/> \
-      <remark>Schau dir das Übungsblatt für detaillierte Anweisungen an!</remark>',
+    en: 'Implement the "Right-Hand Rule" algorithm and lead the owl to the goal! <refertosheet/>',
+    de: 'Implementiere den "Right-Hand Rule"-Algorithmus und führe die Eule zum Ziel! <refertosheet/>',
   },
   levelData: {
     maze: {

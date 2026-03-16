@@ -11,6 +11,7 @@ import {
 import type { Translator } from "../../../../../../shared/i18n/i18n.ts";
 import { useTranslation } from "react-i18next";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { FiExternalLink } from "react-icons/fi";
 
 type TaskDescriptionProps = {
   description: string;
@@ -48,7 +49,7 @@ function renderNode(node: ChildNode, key: number, t: Translator): ReactNode {
   }
 }
 
-type Tag = "hint" | "remark" | "warn" | "br" | "ol" | "li";
+type Tag = "hint" | "remark" | "warn" | "br" | "ol" | "li" | "refertosheet";
 type TagRenderer = (
   children: ReactNode[],
   el: Element,
@@ -99,7 +100,7 @@ const renderers: Partial<Record<Tag, TagRenderer>> = {
   warn: collapsable(
     (t) => ({
       title: t("taskDescription.warn"),
-      color: "var(--clr-warning-a10)"
+      color: "var(--clr-warning-a10)",
     }),
     (children) => (
       <IconText
@@ -114,6 +115,15 @@ const renderers: Partial<Record<Tag, TagRenderer>> = {
   br: () => <br />,
   ol: (children) => <ol className={styles["tag-ol"]}>{children}</ol>,
   li: (children) => <li className={styles["tag-li"]}>{children}</li>,
+  refertosheet: (_children, _el, t) => (
+    <IconText
+      icon={<FiExternalLink />}
+      top="3px"
+      className={clsx(styles["tag-remark"])}
+    >
+      <div>{t("taskDescription.referToSheet")}</div>
+    </IconText>
+  ),
 };
 
 function rendererOf(tag: Tag): TagRenderer {

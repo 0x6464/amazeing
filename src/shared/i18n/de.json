@@ -150,5 +150,6 @@
   "unmetConstraints.checkSolution": "Zurückgehen und Lösung überprüfen",
 
   "taskDescription.hint": "Tipp anzeigen",
-  "taskDescription.remark": "Anmerkung anzeigen"
+  "taskDescription.remark": "Anmerkung anzeigen",
+  "taskDescription.referToSheet": "Schau dir das Übungsblatt für detaillierte Anweisungen an!"
 }

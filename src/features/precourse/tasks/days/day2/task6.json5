@@ -1,11 +1,11 @@
 {
   title: {
     en: 'Binary Trees',
-    de: 'Binary Trees',
+    de: 'Binärbäume',
   },
   description: {
-    en: "Use No Hau's clues to solve this tree-like labyrinth!",
-    de: 'Benutze No Haus Hinweise, um dieses baumartige Labyrinth zu lösen!',
+    en: 'Use "Treeana"\'s clues to solve this tree-like labyrinth! <refertosheet/>',
+    de: 'Benutze "Treeana"s Hinweise, um dieses baumartige Labyrinth zu lösen! <refertosheet/>',
   },
   levelData: {
     maze: {

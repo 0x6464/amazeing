@@ -1,21 +1,21 @@
 {
   title: {
-    en: 'Lists',
-    de: 'Listen',
+    en: 'Arrays',
+    de: 'Arrays',
   },
   description: {
-    en: 'This task is about lists (arrays). \
+    en: 'This task is about arrays. \
       In the given code, a sequence of directions is written to an array. \
       This sequence will guide your owl to the goal. \
       Your task is now to write a program that reads the directions one-by-one and then takes a step in that direction. \
        \
-      For help, the length of the array has been written to the variable length.',
-    de: 'In dieser Aufgabe geht es um Listen (Arrays). \
+      <remark hidden="true">For help, the length of the array has been written to the variable length.</remark>',
+    de: 'In dieser Aufgabe geht es um Arrays. \
       Im gegebenen Code wird eine Sequenz von Richtungen in einen Array geschrieben. \
       Diese Sequenz wird deine Eule zum Ziel führen. \
       Deine Aufgabe ist es nun, ein Programm zu schreiben, das die Richtungen nacheinander liest und dann einen Schritt in diese Richtung macht. \
        \
-      Als Hilfe wurde die Länge des Arrays in die Variable length geschrieben.',
+      <remark hidden="true">Als Hilfe wurde die Länge des Arrays in die Variable length geschrieben.</remark>',
   },
   levelData: {
     maze: {

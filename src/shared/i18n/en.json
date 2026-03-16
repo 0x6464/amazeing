@@ -152,5 +152,6 @@
   "unmetConstraints.checkSolution": "Go back and check your solution",
 
   "taskDescription.hint": "Show Hint",
-  "taskDescription.remark": "Show Remark"
+  "taskDescription.remark": "Show Remark",
+  "taskDescription.referToSheet": "Have a look at the exercise sheet for detailed instructions!"
 }
