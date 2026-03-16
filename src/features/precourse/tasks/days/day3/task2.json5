@@ -1,7 +1,7 @@
 {
   title: {
-    en: 'In Circles',
-    de: 'Im Kreis',
+    en: 'Roundabout',
+    de: 'Kreisverkehr',
   },
   description: {
     en: 'The strategy from "Task 1.4 (Subroutines)" leads to the owl running in circles in this maze, change its solution so that:<br/> \
