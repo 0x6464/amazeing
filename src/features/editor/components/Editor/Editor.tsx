@@ -53,7 +53,7 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
   );
   const { isMobile } = useCalculateLayout();
   // Open by default if not multi-source (sandbox)
-  const [codePanelOpen, setcodePanelOpen] = useState(!isMultiSource(source));
+  const [codePanelOpen, setCodePanelOpen] = useState(!isMultiSource(source));
   const minWidths = isMultiSource(source)
     ? fileEditorMinWidths
     : taskEditorMinWidths;
@@ -94,7 +94,7 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
             editorExtensions={[currentLineHighlighter(() => currentLine)]}
             transitionDuration={transitionDuration}
             onPanelChange={(open) => {
-              setcodePanelOpen(open);
+              setCodePanelOpen(open);
             }}
           />
         ) : (
@@ -102,7 +102,7 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
             editorExtensions={[currentLineHighlighter(() => currentLine)]}
             transitionDuration={transitionDuration}
             onPanelChange={(open) => {
-              setcodePanelOpen(open);
+              setCodePanelOpen(open);
             }}
           />
         )}
