@@ -41,12 +41,13 @@ export class Parser {
     this.tokens = tokens;
   }
 
+  /**
+   * Parses the code
+   */
   parse(): ParsingResult {
     while (this.peek() !== null) {
       try {
         this.parseLine();
-        // Increment line counter
-        this.line++;
       } catch (err) {
         // Add line number to error
         if (!(err instanceof Error)) throw err;
@@ -66,6 +67,7 @@ export class Parser {
     // Pop newline
     if (this.peekType("newline")) {
       this.pop();
+      this.line++;
       return;
     }
 
@@ -76,9 +78,9 @@ export class Parser {
 
     // Label definition
     if (this.peekType("identifier") && this.peekType("colon", 1)) {
-      const { label, line } = this.parseLabel();
-      // Set the pc to next line
-      this.labels.set(label, { label, pc: line + 1 });
+      const { label } = this.parseLabel();
+      // Set the pc to the next instruction to be added
+      this.labels.set(label, { label, pc: this.instructions.length });
       return;
     }
 
@@ -102,10 +104,7 @@ export class Parser {
     this.popTypeOrThrow("colon"); // Colon
     const label = identifierToken.value;
     if (this.labels.has(label)) {
-      const existing = this.labels.get(label)!;
-      throw new Error(
-        `Label "${label}" already defined on line ${existing.pc - 1}`,
-      );
+      throw new Error(`Label "${label}" already defined`);
     }
     return { label, line: this.line };
   }
@@ -208,9 +207,11 @@ export class Parser {
         const name = this.popTypeOrThrow("identifier").value;
         let isArray = false;
         if (this.peekType("lbracket")) {
-          if (!this.peekType("rbracket", 1)) {
+          this.pop(); // [
+          if (!this.peekType("rbracket")) {
             throw new Error(`Unclosed bracket: "${name}["`);
           }
+          this.popTypeOrThrow("rbracket"); // ]
           isArray = true;
         }
         return { type: "var", name, isArray };
@@ -256,11 +257,11 @@ export class Parser {
   }
 
   parseDirection(): Direction {
-    const token = this.popTypeOrThrow("identifier");
-    if (isDirection(token)) {
-      return token;
+    const value = this.popTypeOrThrow("identifier").value;
+    if (isDirection(value)) {
+      return value;
     }
-    throw new Error(`Invalid direction: "${token}"`);
+    throw new Error(`Invalid direction: "${value}"`);
   }
 
   parseValue(): Value {
@@ -270,7 +271,10 @@ export class Parser {
     }
     if (token.type === "identifier") {
       // Direction
-      return this.parseDirection();
+      if (isDirection(token.value)) {
+        return this.parseDirection();
+      }
+      throw new Error(`Invalid value: "${token.value}"`);
     }
     // Number
     return this.popTypeOrThrow("number").value;
@@ -283,7 +287,7 @@ export class Parser {
     }
     if (token.type === "identifier") {
       // Direction value
-      if (isDirection(token)) {
+      if (isDirection(token.value)) {
         return this.parseDirection();
       }
       // Address
@@ -350,7 +354,9 @@ export class Parser {
     if (token.type === type) {
       return token as Extract<Token, { type: T }>;
     }
-    throw new Error(`Unexpected token of type "${token.type}"`);
+    throw new Error(
+      `Unexpected token of type "${token.type}", expected "${type}"`,
+    );
   }
 
   /**
