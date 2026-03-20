@@ -1,19 +1,32 @@
 import type { Token } from "./token.ts";
 import { ErrorWithTip, LocatableError } from "../error.ts";
 
+/**
+ * Lexer class
+ */
 export class Lexer {
   private pos = 0;
   private readonly input: string;
 
+  /**
+   * Creates a new lexer instance
+   * @param input input to tokenize
+   */
   constructor(input: string) {
     this.input = input;
   }
 
+  /**
+   * Tokenizes the input and returns an array of tokens.
+   * @throws {LocatableError} If an error occurs during tokenization.
+   */
   tokenize(): Token[] {
     const tokens: Token[] = [];
     while (this.pos < this.input.length) {
       try {
-        tokens.push(this.nextToken());
+        const nextToken = this.nextToken();
+        if (nextToken === null) break;
+        tokens.push(nextToken);
       } catch (err) {
         const { line } = this.location();
         // Add line number to error
@@ -27,10 +40,13 @@ export class Lexer {
     return tokens;
   }
 
-  private nextToken(): Token {
+  /**
+   * Lexes the next token or null if no more tokens
+   */
+  private nextToken(): Token | null {
     while (true) {
       const c = this.peek();
-      if (c === null) break;
+      if (c === null) return null;
 
       // Newline
       if (c === "\n") {
@@ -80,10 +96,9 @@ export class Lexer {
           this.pop();
           return { type: "rbracket" };
       }
-      throw new Error(`Unexpected character "${c}"`);
+
+      throw new Error(`Unexpected character: ${c}`);
     }
-    // TODO: Thrown on empty input?
-    throw new Error(`Unexpected character "${this.peek()}"`);
   }
 
   private readIdentifier(): Token {
