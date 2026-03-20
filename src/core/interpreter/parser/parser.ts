@@ -13,7 +13,7 @@ import {
   isDirection,
   type Value,
 } from "../types.ts";
-import { ErrorWithTip, LocatableError } from "../error.ts";
+import { LocatableError } from "../error.ts";
 
 export type ParsingResult = {
   instructions: InstructionData[];
@@ -45,17 +45,9 @@ export class Parser {
    * Parses the code
    */
   parse(): ParsingResult {
+    // Parsing loop
     while (this.peek() !== null) {
-      try {
-        this.parseLine();
-      } catch (err) {
-        // Add line number to error
-        if (!(err instanceof Error)) throw err;
-        if (err instanceof ErrorWithTip) {
-          throw new LocatableError(this.line, err.message, err.tip);
-        }
-        throw new LocatableError(this.line, err.message);
-      }
+      this.parseLine();
     }
 
     // Return result
@@ -94,7 +86,7 @@ export class Parser {
       return;
     }
 
-    throw new Error(
+    this.error(
       `Unexpected token of type ${this.peek()!.type} at start of line`,
     );
   }
@@ -104,7 +96,7 @@ export class Parser {
     this.popTypeOrThrow("colon"); // Colon
     const label = identifierToken.value;
     if (this.labels.has(label)) {
-      throw new Error(`Label "${label}" already defined`);
+      this.error(`Label "${label}" already defined`);
     }
     return { label, line: this.line };
   }
@@ -196,7 +188,7 @@ export class Parser {
       case "turn": {
         const direction = this.parseDirection();
         if (direction !== "left" && direction !== "right") {
-          throw new Error(
+          this.error(
             `Invalid direction: "${direction}", must be "left" or "right"`,
           );
         }
@@ -209,7 +201,7 @@ export class Parser {
         if (this.peekType("lbracket")) {
           this.pop(); // [
           if (!this.peekType("rbracket")) {
-            throw new Error(`Unclosed bracket: "${name}["`);
+            this.error(`Unclosed bracket: "${name}["`);
           }
           this.popTypeOrThrow("rbracket"); // ]
           isArray = true;
@@ -235,8 +227,9 @@ export class Parser {
         const src = this.hasMore() ? this.parseAddress() : undefined;
         return { type, src };
       }
-      default:
-        throw new Error(`Unknown instruction: "${type}"`);
+      default: {
+        this.error(`Unknown instruction: "${type}"`);
+      }
     }
   }
 
@@ -261,20 +254,20 @@ export class Parser {
     if (isDirection(value)) {
       return value;
     }
-    throw new Error(`Invalid direction: "${value}"`);
+    this.error(`Invalid direction: "${value}"`);
   }
 
   parseValue(): Value {
     const token = this.peek();
     if (token === null) {
-      throw new Error(`Expected a value, but got end of line`);
+      this.error(`Expected a value, but got end of line`);
     }
     if (token.type === "identifier") {
       // Direction
       if (isDirection(token.value)) {
         return this.parseDirection();
       }
-      throw new Error(`Invalid value: "${token.value}"`);
+      this.error(`Invalid value: "${token.value}"`);
     }
     // Number
     return this.popTypeOrThrow("number").value;
@@ -283,7 +276,7 @@ export class Parser {
   parseAddressOrValue(): Address | Value {
     const token = this.peek();
     if (token === null) {
-      throw new Error(`Expected an address or value, but got end of line`);
+      this.error(`Expected an address or value, but got end of line`);
     }
     if (token.type === "identifier") {
       // Direction value
@@ -343,20 +336,16 @@ export class Parser {
     const token = this.pop();
     if (token === null) {
       if (this.currentlyParsing !== null) {
-        throw new Error(
+        this.error(
           `Expected more arguments for instruction of type ${this.currentlyParsing}`,
         );
       }
-      throw new Error(
-        `Unexpected end of input, expected token of type ${type}`,
-      );
+      this.error(`Unexpected end of input, expected token of type ${type}`);
     }
     if (token.type === type) {
       return token as Extract<Token, { type: T }>;
     }
-    throw new Error(
-      `Unexpected token of type "${token.type}", expected "${type}"`,
-    );
+    this.error(`Unexpected token of type "${token.type}", expected "${type}"`);
   }
 
   /**
@@ -366,10 +355,20 @@ export class Parser {
   private assertLineEnd() {
     if (this.peekType("newline") || this.peek() === null) return;
     if (this.currentlyParsing !== null) {
-      throw new Error(
+      this.error(
         `Unexpected argument(s) for instruction of type "${this.currentlyParsing}"`,
       );
     }
-    throw new Error(`Unexpected tokens at the end of line!`);
+    this.error(`Unexpected tokens at the end of line!`);
+  }
+
+  /**
+   * Throws an error
+   */
+  private error(message: string, tip?: string): never {
+    if (tip !== undefined) {
+      throw new LocatableError(this.line, message, tip);
+    }
+    throw new LocatableError(this.line, message);
   }
 }
