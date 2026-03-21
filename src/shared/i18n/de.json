@@ -42,6 +42,8 @@
   "viewport.title": "Ansicht",
   "viewport.camera.lock": "Kamera an Eule binden",
   "viewport.camera.unlock": "Kamera entbinden",
+  "viewport.notRequired": "Das Maze ist nicht erforderlich, um diese Aufgabe zu lösen",
+
   "editor.run": "Ausführen",
   "editor.stop": "Stoppen",
   "editor.step": "Schritt",

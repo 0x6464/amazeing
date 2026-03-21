@@ -42,6 +42,8 @@
   "viewport.title": "Viewport",
   "viewport.camera.lock": "Lock Camera to Owl",
   "viewport.camera.unlock": "Unlock Camera",
+  "viewport.notRequired": "The maze is not required to solve this task",
+
   "editor.run": "Run",
   "editor.stop": "Stop",
   "editor.step": "Step",

@@ -50,6 +50,10 @@ function EditorWrapper() {
         level={level}
         constraints={task.constraints}
         onFinish={(constraints) => {
+          if (task.levelData.requiredForTask ?? true) {
+            // Ignore
+            return;
+          }
           if (constraints.every((c) => c.met)) {
             setCompleted(task.id, true);
           } else if (!completedTasks.includes(task.id)) {
