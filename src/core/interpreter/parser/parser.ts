@@ -232,7 +232,9 @@ export class Parser {
         return { type, direction };
       }
       case "printascii": {
-        const src = this.hasTokensInLine() ? this.parseAddress() : undefined;
+        const src = this.peekType("char")
+          ? this.popTypeOrThrow("char").value
+          : this.parseAddress();
         return { type, src };
       }
       default: {

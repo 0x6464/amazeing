@@ -69,7 +69,7 @@ export type Instruction =
   | { type: "branchz"; cond: Address; target: string }
   // Other instructions
   | OneVarInstruction<"print">
-  | { type: "printascii"; src?: Address }
+  | { type: "printascii"; src: Address | number }
   | OneVarInstruction<"debug">
   // Advanced owl instructions
   | { type: "mark"; direction?: Direction }

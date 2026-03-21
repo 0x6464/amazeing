@@ -165,11 +165,7 @@ export const EXECUTORS: Executors = {
   },
 
   printascii: (env, { src }) => {
-    if (src === undefined) {
-      env.console.append({ type: "log", text: "\n" });
-      return;
-    }
-    const value = env.getIntegerOrThrow(src);
+    const value = typeof src === "number" ? src : env.getIntegerOrThrow(src);
     env.console.append({ type: "log", text: String.fromCharCode(value) });
   },
 
