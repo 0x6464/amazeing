@@ -2,6 +2,16 @@ import type { Token } from "./token.ts";
 import { LocatableError } from "../error.ts";
 
 /**
+ * Escape character lookup
+ */
+const ESCAPES: Record<string, string> = {
+  n: "\n",
+  t: "\t",
+  "'": "'",
+  "\\": "\\",
+};
+
+/**
  * Lexer class
  */
 export class Lexer {
@@ -78,6 +88,11 @@ export class Lexer {
         return this.readChar();
       }
 
+      // String literal
+      if (c === '"') {
+        return this.readString();
+      }
+
       // Symbols
       switch (c) {
         case ":":
@@ -116,51 +131,61 @@ export class Lexer {
 
   private readChar(): Token {
     this.pop(); // '
-    const c = this.peek();
+    let c = this.peek();
     if (c === null) {
       this.error(`Unterminated character literal`, `Missing closing '`);
     }
     if (c === "\\") {
-      return this.readEscapeSequence();
-    }
-    if (this.peek(1) !== "'") {
-      this.error(
-        `Invalid character literal`,
-        `Character literals must contain exactly one character, e.g. 'a' or '\n'`,
-      );
-    }
-    this.pop(); // Character
-    this.pop(); // Closing '
-    return { type: "char", value: c.charCodeAt(0) };
-  }
-
-  private readEscapeSequence(): Token {
-    this.pop(); // \
-    const c = this.pop();
-    // Supported escape characters
-    const escapes: Record<string, string> = {
-      n: "\n",
-      t: "\t",
-      "'": "'",
-      "\\": "\\",
-    };
-    if (c === null || !(c in escapes)) {
-      this.error(
-        `Invalid escaped sequence: \\${c ?? ""}`,
-        `Supported escape sequences are ` +
-          Object.keys(escapes)
-            .map((e) => `'\\${e}'`)
-            .join(", "),
-      );
+      c = this.readEscapeSequence();
+    } else {
+      this.pop(); // Character
     }
     if (this.peek() !== "'") {
       this.error(
         `Invalid character literal`,
-        `Character literals must contain exactly one character, e.g. 'a' or '\n'`,
+        `Character literals must contain exactly one character, e.g. 'a' or '\\n'`,
       );
     }
     this.pop(); // Closing '
-    return { type: "char", value: escapes[c].charCodeAt(0) };
+    return { type: "char", value: c.charCodeAt(0) };
+  }
+
+  private readEscapeSequence(): string {
+    this.pop(); // \
+    const c = this.pop();
+    if (c === null || !(c in ESCAPES)) {
+      this.error(
+        `Invalid escaped sequence: \\${c ?? ""}`,
+        `Supported escape sequences are ` +
+          Object.keys(ESCAPES)
+            .map((e) => `'\\${e}'`)
+            .join(", "),
+      );
+    }
+    return ESCAPES[c];
+  }
+
+  private readString(): Token {
+    this.pop(); // "
+    let value = "";
+    while (true) {
+      const c = this.peek();
+      if (c === null) {
+        this.error(`Unterminated string literal`, `Missing closing "`);
+      }
+      if (c === '"') {
+        // Closing quote
+        this.pop();
+        break;
+      }
+      if (c === "\\") {
+        // Escape char
+        value += this.readEscapeSequence();
+      }
+      // Regular char
+      value += this.pop();
+    }
+    return { type: "string", value: value };
   }
 
   /**

@@ -1,6 +1,7 @@
 import type { VariableValue } from "./environment.ts";
 
 export type Value = Integer | Direction;
+export type StringLiteral = { literal: string };
 
 export type Position = { x: number; y: number };
 
@@ -92,6 +93,10 @@ export function isValue(value: unknown): value is Value {
   return isInteger(value) || isDirection(value as Value);
 }
 
+export function isStringLiteral(value: unknown): value is StringLiteral {
+  return typeof value === "object" && value !== null && "literal" in value;
+}
+
 export function typeOfValue(value: VariableValue): string {
   if (isInteger(value)) {
     return "integer";
@@ -110,7 +115,7 @@ export function typeOfVariableValue(value: VariableValue): string {
     }
     // Print all types
     const types = value.filter((v) => v !== null).map(typeOfVariableValue);
-    const type = [ ...new Set(types) ].join("|");
+    const type = [...new Set(types)].join("|");
     return `array[${type}]`;
   }
   throw new Error(`Unknown variable value type: ${value}`);

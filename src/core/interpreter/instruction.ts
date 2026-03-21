@@ -3,6 +3,7 @@ import type {
   Direction,
   Integer,
   LeftRight,
+  StringLiteral,
   Value,
   Variable,
 } from "./types.ts";
@@ -36,7 +37,7 @@ export type Instruction =
   | { type: "explore"; dest: Address; direction?: Direction }
   // Variable instructions
   | { type: "var"; name: Variable; isArray: boolean }
-  | { type: "load"; dest: Address; value: Value }
+  | { type: "load"; dest: Address; value: Value | StringLiteral }
   | TwoVarInstruction<"copy">
   // Arithmetic instructions
   | ThreeVarInstruction<"add">

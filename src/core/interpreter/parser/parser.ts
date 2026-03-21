@@ -17,6 +17,7 @@ import {
   type Direction,
   isDirection,
   type LeftRight,
+  type StringLiteral,
   type Value,
 } from "../types.ts";
 import { LocatableError } from "../error.ts";
@@ -213,7 +214,9 @@ export class Parser {
       }
       case "load": {
         const dest = this.parseAddress();
-        const value = this.parseValue();
+        const value: Value | StringLiteral = this.peekType("string")
+          ? { literal: this.popTypeOrThrow("string").value }
+          : this.parseValue();
         return {
           type: "load",
           dest,

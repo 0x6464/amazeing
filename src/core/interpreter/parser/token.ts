@@ -9,6 +9,7 @@ export type Token =
   | Tok<"identifier", string>
   | Tok<"number", number>
   | Tok<"char", number>
+  | Tok<"string", string>
   | Tok<"colon">
   | Tok<"lbracket">
   | Tok<"rbracket">

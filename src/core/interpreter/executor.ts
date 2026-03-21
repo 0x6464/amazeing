@@ -10,6 +10,7 @@ import {
   type Address,
   booleanToInteger,
   isArrayAccess,
+  isStringLiteral,
   isValue,
   typeOfVariableValue,
   type Value,
@@ -55,6 +56,13 @@ export const EXECUTORS: Executors = {
   },
 
   load: (env, { dest, value }) => {
+    if (isStringLiteral(value)) {
+      // String literal, set as array of numbers
+      const array = value.literal.split("").map((char) => char.charCodeAt(0));
+      array[array.length] = 0;
+      env.setOrThrow(dest, array);
+      return;
+    }
     env.setOrThrow(dest, value);
   },
 
