@@ -8,10 +8,12 @@ import { ConstraintsView } from "./ConstraintsView/ConstraintsView.tsx";
 import { useInterpreter } from "../../../context/interpreter/InterpreterContext.tsx";
 import { TaskDescription } from "./TaskDescription/TaskDescription.tsx";
 import { motion } from "motion/react";
+import { Button } from "../../../../../shared/components/Button/Button.tsx";
+import { MdDoneAll } from "react-icons/md";
 
 export function TaskView() {
   const { t } = useTranslatable();
-  const { task, days, completedTasks } = useTasks();
+  const { task, days, completedTasks, setCompleted } = useTasks();
   const { constraints } = useInterpreter();
   const dayTitle = translateDayId(t, task.dayId);
   const taskNumber = t("day.task", { num: task.taskNumber });
@@ -19,6 +21,7 @@ export function TaskView() {
   const completedTasksInDay = day.tasks.filter((t) =>
     completedTasks.includes(t.id),
   ).length;
+  const isCompleted = completedTasks.includes(task.id);
   return (
     <motion.div className={styles.container} layout>
       <motion.div
@@ -32,9 +35,13 @@ export function TaskView() {
         <div className={styles.separator} />
         <div className={styles.title}>{t(task.title)}</div>
         <div className={styles.separator} />
+
+        {/*Task description*/}
         <div className={styles.description}>
           <TaskDescription description={t(task.description)} />
         </div>
+
+        {/*Constraints*/}
         {constraints && (
           <>
             <div className={styles.separator} />
@@ -42,6 +49,27 @@ export function TaskView() {
             <div className={styles.separator} />
           </>
         )}
+
+        {/*Self check*/}
+        {task.selfChecked && !isCompleted && (
+          <>
+            <div className={styles.separator} />
+            <div className={styles.description}>
+              {t("tasks.selfChecked.explanation")}
+            </div>
+            <Button
+              variant="success"
+              onClick={() => {
+                setCompleted(task.id, true);
+              }}
+            >
+              <MdDoneAll />
+              {t("tasks.selfChecked.markCompleted")}
+            </Button>
+          </>
+        )}
+
+        {/*Progress bar*/}
         <div className={styles.dayProgressContainer}>
           <div className={styles.dayProgressTitle}>{dayTitle}</div>
           <div className={styles.verticalSeparator} />
@@ -58,6 +86,8 @@ export function TaskView() {
           </div>
         </div>
       </motion.div>
+
+      {/*Task selector*/}
       <motion.div
         className={styles.taskSelectorContainer}
         layout

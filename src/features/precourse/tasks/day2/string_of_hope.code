@@ -1,0 +1,27 @@
+# Test your code here
+exit
+
+# Calculates the length of a given string,
+# excluding the null terminator
+# arg0: null-terminated string
+string_length:
+  # Implement
+  ret
+
+# Concatenates two given strings
+# arg0: null-terminated string
+# arg1: null-terminated string
+# Returns:
+# arg0: concatenated string
+string_concat:
+  # Implement
+  ret
+
+# Checks if two given strings are equal
+# arg0: null-terminated string
+# arg1: null-terminated string
+# Returns:
+# arg0: 1 if the strings are equal, 0 otherwise
+string_equals:
+  # Implement
+  ret

@@ -42,6 +42,8 @@
   "viewport.title": "Viewport",
   "viewport.camera.lock": "Lock Camera to Owl",
   "viewport.camera.unlock": "Unlock Camera",
+  "viewport.notRequired": "The maze is not required to solve this task",
+
   "editor.run": "Run",
   "editor.stop": "Stop",
   "editor.step": "Step",
@@ -153,5 +155,8 @@
 
   "taskDescription.hint": "Show Hint",
   "taskDescription.remark": "Show Remark",
-  "taskDescription.referToSheet": "Have a look at the exercise sheet for detailed instructions!"
+  "taskDescription.referToSheet": "Have a look at the exercise sheet for detailed instructions!",
+
+  "tasks.selfChecked.explanation": "This task does not depend on the maze. You have to check yourself that your solution is correct.",
+  "tasks.selfChecked.markCompleted": "My solution is correct"
 }

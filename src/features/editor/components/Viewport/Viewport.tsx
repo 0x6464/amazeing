@@ -22,6 +22,7 @@ import { TbLock, TbLockOpen2 } from "react-icons/tb";
 import { useTranslation } from "react-i18next";
 import type { FileStorage } from "../../context/storage/fileStorage.ts";
 import type { MarkData } from "../../../../core/game/marks.ts";
+import { IoIosWarning } from "react-icons/io";
 
 const ZOOM_SPEED = 0.0015;
 const DEFAULT_ZOOM = 4;
@@ -229,11 +230,15 @@ export function Viewport({
     });
   };
 
+  const requiredForTask = level.data.requiredForTask ?? true;
+
   return (
-    <div className={styles.viewport}>
+    <div
+      className={clsx(styles.viewport, !requiredForTask && styles.notRequired)}
+    >
       <CornerGroup position="top-right">
         <ButtonGroup>
-          {lockCameraControls && (
+          {lockCameraControls && requiredForTask && (
             <Tooltip
               content={
                 following
@@ -253,6 +258,15 @@ export function Viewport({
           {levelStorage && <LevelSelector levelStorage={levelStorage} />}
         </ButtonGroup>
       </CornerGroup>
+
+      {!requiredForTask && (
+        <div className={clsx(styles.notRequiredContainer)}>
+          <div className={clsx(styles.notRequiredText, "flex-text")}>
+            <IoIosWarning />
+            {t("viewport.notRequired")}
+          </div>
+        </div>
+      )}
 
       <canvas
         ref={canvasRef}

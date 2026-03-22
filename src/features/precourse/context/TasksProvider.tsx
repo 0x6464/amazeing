@@ -74,7 +74,7 @@ export function TasksProvider({
         }
       });
       // Popup
-      if (completed) {
+      if ((completed && task.levelData.requiredForTask) ?? true) {
         modal.setProps({ title: t("taskCompleted.title"), maxWidth: 600 });
         modal.setContent(
           <TaskCompleted
