@@ -14,6 +14,7 @@ import {
 import { ErrorWithTip } from "./error.ts";
 import type { Level } from "../game/level.ts";
 import type { Marks } from "../game/marks.ts";
+import { PREDEFINED_VARIABLES } from "./vars.ts";
 
 export type VariableValue = Value | Array | null;
 export type VariableValueNotNull = Value | Array;
@@ -80,6 +81,13 @@ export class Environment {
     }
     if (this.args.has(address)) {
       return this.args.get(address);
+    }
+    const predefined = PREDEFINED_VARIABLES[address];
+    if (predefined) {
+      if (predefined.onGet === undefined) {
+        throw new Error(`Cannot read from predefined variable "${address}"`);
+      }
+      return predefined.onGet(this);
     }
     return this.global.get(address);
   }
@@ -209,6 +217,15 @@ export class Environment {
       this.args.set(address as Variable, value);
       return;
     }
+    const name = getVariableOf(address);
+    const predefined = PREDEFINED_VARIABLES[name];
+    if (predefined) {
+      if (predefined.onSet === undefined) {
+        throw new Error(`Cannot set predefined variable "${address}"`);
+      }
+      predefined.onSet(value, this);
+      return;
+    }
     if (this.stack.length === 0) {
       this.stack.push({ returnAddress: undefined, variables: new Map() });
     }
@@ -230,6 +247,9 @@ export class Environment {
       return this.isDefined(address.array);
     }
     if (isArg(address)) {
+      return true;
+    }
+    if (PREDEFINED_VARIABLES[address]) {
       return true;
     }
     return this.get(address) !== undefined;

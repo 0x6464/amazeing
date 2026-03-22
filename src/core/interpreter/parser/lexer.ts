@@ -75,7 +75,8 @@ export class Lexer {
       }
 
       // Identifier
-      if (isAlpha(c)) {
+      // Allow predefined vars to start with $
+      if (isAlpha(c) || c === "$") {
         return this.readIdentifier();
       }
 
@@ -115,7 +116,7 @@ export class Lexer {
   }
 
   private readIdentifier(): Token {
-    let value = "";
+    let value = this.pop()!;
     while (this.peek() != null && isAlphaNumeric(this.peek()!)) {
       value += this.pop();
     }
