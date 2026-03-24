@@ -52,6 +52,8 @@ export const breakpointTheme = EditorView.baseTheme({
   },
   ".cm-gutterElement": {
     cursor: "pointer",
+    "user-select": "none",
+    "-webkit-user-select": "none",
   },
   ".cm-gutterElement:hover": {
     color: "var(--clr-danger-a10)",
