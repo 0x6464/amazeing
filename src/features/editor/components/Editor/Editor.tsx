@@ -2,7 +2,6 @@ import { Console } from "../Console/Console.tsx";
 import { Viewport } from "../Viewport/Viewport.tsx";
 import styles from "./Editor.module.css";
 import { ButtonGroup } from "../../../../shared/components/Button/ButtonGroup/ButtonGroup.tsx";
-import { useInterpreter } from "../../context/interpreter/InterpreterContext.tsx";
 import { getTransitionSpeed } from "../../utils.ts";
 import { useEditorSettings } from "../../context/settings/EditorSettingsContext.tsx";
 import { ExecutionControls } from "./ExecutionControls/ExecutionControls.tsx";
@@ -11,8 +10,6 @@ import { FileCodeEditor } from "../FileCodeEditor/FileCodeEditor.tsx";
 import { PanelContainer } from "../../../../shared/components/PanelContainer/PanelContainer.tsx";
 import { Panel } from "../../../../shared/components/Panel/Panel.tsx";
 import { TaskCodeEditor } from "../TaskCodeEditor/TaskCodeEditor.tsx";
-import { useCodeModel } from "../../context/code/CodeModelContext.tsx";
-import { isMultiSource } from "../../context/source/source.ts";
 import type { FileStorage } from "../../context/storage/fileStorage.ts";
 import type { LevelData } from "../../../../core/game/level.ts";
 import { useCalculateLayout } from "../../../../shared/utils/useCalculateLayout.tsx";
@@ -24,6 +21,12 @@ import {
   breakpointTheme,
   lineNumbersClickable,
 } from "../../../../core/amazeing/breakpoints.ts";
+import { useSourceType } from "../../context/code/SourceTypeContext.tsx";
+import { useOutput } from "../../context/interpreter/contexts/OutputContext.tsx";
+import { useGame } from "../../context/interpreter/contexts/GameContext.tsx";
+import type { PanelMinWidths } from "../CodeEditorWithPanel/CodeEditorWithPanel.tsx";
+import { useExecution } from "../../context/interpreter/contexts/ExecutionContext.tsx";
+import { useBreakpoints } from "../../context/interpreter/contexts/BreakpointsContext.tsx";
 
 export const MIN_RUN_SPEED = 1;
 export const MAX_RUN_SPEED = 100;
@@ -48,28 +51,11 @@ export type EditorProps = {
 const SEPARATOR_WIDTH = 8;
 
 export function Editor({ levelStorage, owlControls = false }: EditorProps) {
-  const {
-    output,
-    isRunning,
-    level,
-    owlData,
-    currentLine,
-    markData,
-    breakpoints,
-    setBreakpoints,
-  } = useInterpreter();
-  const { source } = useCodeModel();
-  const { settings } = useEditorSettings();
-  const transitionDuration = getTransitionSpeed(
-    isRunning,
-    settings.instructionsPerSecond,
-  );
+  const { isMultiSource } = useSourceType();
   const { isMobile } = useCalculateLayout();
   // Open by default if not multi-source (sandbox)
-  const [codePanelOpen, setCodePanelOpen] = useState(!isMultiSource(source));
-  let minWidths = isMultiSource(source)
-    ? fileEditorMinWidths
-    : taskEditorMinWidths;
+  const [codePanelOpen, setCodePanelOpen] = useState(!isMultiSource);
+  let minWidths = isMultiSource ? fileEditorMinWidths : taskEditorMinWidths;
   if (minWidths.mobile && isMobile) {
     // Use mobile widths
     minWidths = minWidths.mobile;
@@ -78,6 +64,75 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
     ? minWidths.codePanel + minWidths.sidePanel + SEPARATOR_WIDTH
     : minWidths.codePanel;
   const viewportWidth = owlControls ? 620 : 570;
+
+  return (
+    <div className={clsx(styles.editorContainer, isMobile && styles.mobile)}>
+      <PanelContainer
+        orientation={!isMobile ? "horizontal" : "vertical"}
+        minPixels={[viewportWidth, codeEditorWidth]}
+      >
+        <PanelContainer
+          orientation="vertical"
+          initialSizes={[0.6, 0.4]}
+          minSize={0.2}
+        >
+          <Panel paddingless>
+            <ViewportWrapper levelStorage={levelStorage} />
+          </Panel>
+          <div className={styles.consolePanel}>
+            <ButtonGroup center>
+              <ExecutionControls owlControls={owlControls} />
+            </ButtonGroup>
+            <Panel className={styles.console} paddingless>
+              <ConsoleWrapper />
+            </Panel>
+          </div>
+        </PanelContainer>
+        <CodeEditorWrapper
+          minWidths={minWidths}
+          setCodePanelOpen={setCodePanelOpen}
+        />
+      </PanelContainer>
+    </div>
+  );
+}
+
+function ConsoleWrapper() {
+  const { output } = useOutput();
+  return <Console messages={output} />;
+}
+
+function ViewportWrapper({
+  levelStorage,
+}: {
+  levelStorage?: FileStorage<LevelData>;
+}) {
+  const { level, owl, marks } = useGame();
+  return (
+    <Viewport
+      level={level}
+      owl={owl}
+      levelStorage={levelStorage}
+      marks={marks}
+    />
+  );
+}
+
+function CodeEditorWrapper({
+  minWidths,
+  setCodePanelOpen,
+}: {
+  minWidths: PanelMinWidths;
+  setCodePanelOpen: (open: boolean) => void;
+}) {
+  const { isMultiSource } = useSourceType();
+  const { breakpoints, setBreakpoints } = useBreakpoints();
+  const { isRunning, currentLine } = useExecution();
+  const { settings } = useEditorSettings();
+  const transitionDuration = getTransitionSpeed(
+    isRunning,
+    settings.instructionsPerSecond,
+  );
 
   // Editor extensions
   const extensions = [
@@ -94,54 +149,23 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
     breakpointTheme,
   ];
 
-  return (
-    <div className={clsx(styles.editorContainer, isMobile && styles.mobile)}>
-      <PanelContainer
-        orientation={!isMobile ? "horizontal" : "vertical"}
-        minPixels={[viewportWidth, codeEditorWidth]}
-      >
-        <PanelContainer
-          orientation="vertical"
-          initialSizes={[0.6, 0.4]}
-          minSize={0.2}
-        >
-          <Panel paddingless>
-            <Viewport
-              level={level}
-              owl={owlData}
-              levelStorage={levelStorage}
-              marks={markData}
-            />
-          </Panel>
-          <div className={styles.consolePanel}>
-            <ButtonGroup center>
-              <ExecutionControls owlControls={owlControls} />
-            </ButtonGroup>
-            <Panel className={styles.console} paddingless>
-              <Console messages={output} />
-            </Panel>
-          </div>
-        </PanelContainer>
-        {isMultiSource(source) ? (
-          <FileCodeEditor
-            editorExtensions={extensions}
-            transitionDuration={transitionDuration}
-            onPanelChange={(open) => {
-              setCodePanelOpen(open);
-            }}
-            minWidths={minWidths}
-          />
-        ) : (
-          <TaskCodeEditor
-            editorExtensions={extensions}
-            transitionDuration={transitionDuration}
-            onPanelChange={(open) => {
-              setCodePanelOpen(open);
-            }}
-            minWidths={minWidths}
-          />
-        )}
-      </PanelContainer>
-    </div>
+  return isMultiSource ? (
+    <FileCodeEditor
+      editorExtensions={extensions}
+      transitionDuration={transitionDuration}
+      onPanelChange={(open) => {
+        setCodePanelOpen(open);
+      }}
+      minWidths={minWidths}
+    />
+  ) : (
+    <TaskCodeEditor
+      editorExtensions={extensions}
+      transitionDuration={transitionDuration}
+      onPanelChange={(open) => {
+        setCodePanelOpen(open);
+      }}
+      minWidths={minWidths}
+    />
   );
 }

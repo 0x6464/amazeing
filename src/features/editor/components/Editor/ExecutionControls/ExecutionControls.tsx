@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { useInterpreter } from "../../../context/interpreter/InterpreterContext.tsx";
 import { ButtonGroup } from "../../../../../shared/components/Button/ButtonGroup/ButtonGroup.tsx";
 import { Button } from "../../../../../shared/components/Button/Button.tsx";
 import {
@@ -13,6 +12,8 @@ import { Tooltip } from "../../../../../shared/floating/components/Tooltip/Toolt
 import { ExecutionSettings } from "./ExecutionSettings/ExecutionSettings.tsx";
 import { OwlControls } from "./OwlControls/OwlControls.tsx";
 import { useCalculateLayout } from "../../../../../shared/utils/useCalculateLayout.tsx";
+import { useExecution } from "../../../context/interpreter/contexts/ExecutionContext.tsx";
+import { useBreakpoints } from "../../../context/interpreter/contexts/BreakpointsContext.tsx";
 
 type ExecutionControlsProps = {
   owlControls?: boolean;
@@ -30,11 +31,13 @@ export function ExecutionControls({
     step,
     reset,
     isRunning,
-    atBreakpoint,
+    currentLine,
     canStep: canEditorStep,
-  } = useInterpreter();
+  } = useExecution();
+  const { isBreakpoint } = useBreakpoints();
   const canStep = canEditorStep();
   const { isMobile } = useCalculateLayout();
+  const atBreakpoint = isBreakpoint(currentLine ?? -1);
   return (
     <ButtonGroup>
       {/* Run Controls */}
