@@ -170,6 +170,18 @@ export class Environment {
     //   throw new Error(`Variable "${identifier}" is already defined.`);
     // }
     // ----------
+    if (identifier.startsWith("$")) {
+      if (PREDEFINED_VARIABLES[identifier]) {
+        throw new ErrorWithTip(
+          `Cannot redefine predefined variables like "${identifier}".`,
+          `Predefined variables are always defined by default. You can use them directly.`,
+        );
+      }
+      throw new ErrorWithTip(
+        `Invalid identifier: "${identifier}".`,
+        `Variable names must start with a letter or an underscore and only contain letters, numbers and underscores.`,
+      );
+    }
     if (isArray) {
       this.set(identifier, []);
       return;
