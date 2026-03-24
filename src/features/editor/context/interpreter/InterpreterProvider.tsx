@@ -3,6 +3,7 @@ import {
   type PropsWithChildren,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -66,6 +67,11 @@ export function InterpreterProvider({
   const [evaluatedConstraints, setEvaluatedConstraints] = useState<
     EvaluatedConstraint[] | undefined
   >(undefined);
+  const [breakpointsArray, setBreakpointsArray] = useState<number[]>([]);
+  const breakpoints = useMemo(
+    () => new Set(breakpointsArray),
+    [breakpointsArray],
+  );
 
   const onFinishRef = useRef(onFinish);
   onFinishRef.current = onFinish;
@@ -201,12 +207,21 @@ export function InterpreterProvider({
           let count = 0;
           while (interpreter.canStep() && count++ < INSTANT_BATCH_SIZE) {
             interpreter.step();
+            const atBreakpoint = breakpoints.has(
+              interpreter.getCurrentLine() ?? -1,
+            );
+            if (atBreakpoint) {
+              break; // Stop execution
+            }
           }
         });
         const interpreter = interpreterRef.current;
         if (interpreter) {
           setCurrentLine(interpreter.getCurrentLine());
-          if (interpreter.canStep()) {
+          const atBreakpoint = breakpoints.has(
+            interpreter.getCurrentLine() ?? -1,
+          );
+          if (interpreter.canStep() && !atBreakpoint) {
             runAnimationFrameRef.current = requestAnimationFrame(runChunk);
           } else {
             stop();
@@ -227,11 +242,15 @@ export function InterpreterProvider({
           interpreter.step();
           setCurrentLine(interpreter.getCurrentLine());
         });
+        const currentLine = interpreter.getCurrentLine() ?? -1;
+        if (breakpoints.has(currentLine)) {
+          stop();
+        }
       } else {
         stop();
       }
     }, 1000 / settings.instructionsPerSecond);
-  }, [settings.instructionsPerSecond, settings.isInstant, stop]);
+  }, [breakpoints, settings.instructionsPerSecond, settings.isInstant, stop]);
 
   const canStep = useCallback(() => {
     return interpreterRef?.current?.canStep() ?? true;
@@ -263,7 +282,9 @@ export function InterpreterProvider({
     if (isRunning) {
       run();
     }
-  }, [isRunning, run, settings.instructionsPerSecond]);
+  }, [isRunning, run, settings.instructionsPerSecond, breakpointsArray]);
+
+  const atBreakpoint = breakpoints.has(currentLine ?? -1);
 
   return (
     <InterpreterContext.Provider
@@ -282,6 +303,9 @@ export function InterpreterProvider({
         isRunning,
         reset,
         constraints: evaluatedConstraints,
+        breakpoints: breakpointsArray,
+        setBreakpoints: setBreakpointsArray,
+        atBreakpoint,
       }}
     >
       {children}

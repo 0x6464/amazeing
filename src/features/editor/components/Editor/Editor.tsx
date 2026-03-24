@@ -19,6 +19,11 @@ import { useCalculateLayout } from "../../../../shared/utils/useCalculateLayout.
 import clsx from "clsx";
 import { useState } from "react";
 import { fileEditorMinWidths, taskEditorMinWidths } from "../../widths.ts";
+import {
+  breakpointDisplay,
+  breakpointTheme,
+  lineNumbersClickable,
+} from "../../../../core/amazeing/breakpoints.ts";
 
 export const MIN_RUN_SPEED = 1;
 export const MAX_RUN_SPEED = 100;
@@ -43,8 +48,16 @@ export type EditorProps = {
 const SEPARATOR_WIDTH = 8;
 
 export function Editor({ levelStorage, owlControls = false }: EditorProps) {
-  const { output, isRunning, level, owlData, currentLine, markData } =
-    useInterpreter();
+  const {
+    output,
+    isRunning,
+    level,
+    owlData,
+    currentLine,
+    markData,
+    breakpoints,
+    setBreakpoints,
+  } = useInterpreter();
   const { source } = useCodeModel();
   const { settings } = useEditorSettings();
   const transitionDuration = getTransitionSpeed(
@@ -65,6 +78,22 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
     ? minWidths.codePanel + minWidths.sidePanel + SEPARATOR_WIDTH
     : minWidths.codePanel;
   const viewportWidth = owlControls ? 620 : 570;
+
+  // Editor extensions
+  const extensions = [
+    currentLineHighlighter(() => currentLine),
+    lineNumbersClickable((line) => {
+      setBreakpoints((prev) => {
+        if (!prev.includes(line)) {
+          return [...prev, line];
+        }
+        return prev.filter((l) => l !== line);
+      });
+    }),
+    breakpointDisplay(breakpoints),
+    breakpointTheme,
+  ];
+
   return (
     <div className={clsx(styles.editorContainer, isMobile && styles.mobile)}>
       <PanelContainer
@@ -95,7 +124,7 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
         </PanelContainer>
         {isMultiSource(source) ? (
           <FileCodeEditor
-            editorExtensions={[currentLineHighlighter(() => currentLine)]}
+            editorExtensions={extensions}
             transitionDuration={transitionDuration}
             onPanelChange={(open) => {
               setCodePanelOpen(open);
@@ -104,7 +133,7 @@ export function Editor({ levelStorage, owlControls = false }: EditorProps) {
           />
         ) : (
           <TaskCodeEditor
-            editorExtensions={[currentLineHighlighter(() => currentLine)]}
+            editorExtensions={extensions}
             transitionDuration={transitionDuration}
             onPanelChange={(open) => {
               setCodePanelOpen(open);

@@ -1,6 +1,6 @@
 import type { ConsoleMessage } from "../../../../core/interpreter/console.ts";
 import { type OwlData } from "../../../../core/game/owl.ts";
-import { createContext, useContext } from "react";
+import { createContext, type Dispatch, type SetStateAction, useContext } from "react";
 import type { Level } from "../../../../core/game/level.ts";
 import type { MarkData } from "../../../../core/game/marks.ts";
 import type { EvaluatedConstraint } from "../../../../core/game/constraints.ts";
@@ -12,6 +12,8 @@ export type InterpreterAPI = {
   canStep: () => boolean;
   step: (steps?: number) => void;
   reset: () => void;
+  breakpoints: number[];
+  setBreakpoints: Dispatch<SetStateAction<number[]>>;
 
   // Game data
   owlData: OwlData;
@@ -23,6 +25,7 @@ export type InterpreterAPI = {
   // Editor
   output: ConsoleMessage[];
   currentLine: number | null;
+  atBreakpoint: boolean;
   isRunning: boolean;
 
   // Other
@@ -35,7 +38,7 @@ export function useInterpreter() {
   const ctx = useContext(InterpreterContext);
   if (!ctx)
     throw new Error(
-      "useEditorRuntime must be used within EditorRuntimeProvider",
+      "useEditorRuntime must be used within EditorRuntimeProvider"
     );
   return ctx;
 }

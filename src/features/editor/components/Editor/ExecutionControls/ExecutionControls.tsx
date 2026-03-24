@@ -30,6 +30,7 @@ export function ExecutionControls({
     step,
     reset,
     isRunning,
+    atBreakpoint,
     canStep: canEditorStep,
   } = useInterpreter();
   const canStep = canEditorStep();
@@ -40,6 +41,14 @@ export function ExecutionControls({
       {isRunning ? (
         <Button variant="danger" onClick={stop}>
           <VscDebugStop /> {isMobile ? "" : t("editor.stop")}
+        </Button>
+      ) : atBreakpoint ? (
+        <Button
+          variant={canStep ? "warning" : "disabled"}
+          disabled={!canStep}
+          onClick={run}
+        >
+          <VscDebugContinue /> {isMobile ? "" : t("editor.continue")}
         </Button>
       ) : (
         <Button

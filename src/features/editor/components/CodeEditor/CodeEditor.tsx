@@ -81,7 +81,7 @@ export function CodeEditor({
         ]}
         onChange={(value) => setCode(value)}
         basicSetup={{
-          lineNumbers: true,
+          lineNumbers: false,
           searchKeymap: false,
         }}
         style={{
