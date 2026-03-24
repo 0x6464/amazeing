@@ -9,7 +9,7 @@ import { RangeSetBuilder } from "@codemirror/state";
 export const lineNumbersClickable = (onClick: (line: number) => void) =>
   lineNumbers({
     domEventHandlers: {
-      click: (view, block) => {
+      mousedown: (view, block) => {
         const line = view.state.doc.lineAt(block.from).number;
         onClick(line);
         return true;

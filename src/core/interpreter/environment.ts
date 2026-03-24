@@ -1,6 +1,6 @@
 import type { LabelDefinition } from "./instruction.ts";
 import { type InterpreterConsole } from "./console.ts";
-import { Owl } from "../game/owl.ts";
+import { LevelOwl, Owl } from "../game/owl.ts";
 import {
   type Address,
   type Array,
@@ -13,7 +13,7 @@ import {
 } from "./types.ts";
 import { ErrorWithTip } from "./error.ts";
 import type { Level } from "../game/level.ts";
-import type { Marks } from "../game/marks.ts";
+import { emptyMarks, Marks } from "../game/marks.ts";
 import { PREDEFINED_VARIABLES } from "./vars.ts";
 
 export type VariableValue = Value | Array | null;
@@ -42,28 +42,23 @@ export class Environment {
   owl: Owl;
   level: Level;
   marks: Marks;
-  private global: VariableMap;
   private readonly stack: StackFrame[];
   private args: VariableMap;
 
   constructor(
     labels: LabelMap,
     interpreterConsole: InterpreterConsole,
-    owl: Owl,
     level: Level,
-    marks: Marks,
-    global: VariableMap = new Map(),
     stack: StackFrame[] = [],
     args: VariableMap = new Map(),
   ) {
     this.labels = labels;
     this.console = interpreterConsole;
-    this.global = global;
     this.stack = stack;
     this.args = args;
-    this.owl = owl;
+    this.owl = new LevelOwl(level.createOwlData(), level);
     this.level = level;
-    this.marks = marks;
+    this.marks = new Marks(emptyMarks(level.maze.width(), level.maze.height()));
   }
 
   /**
@@ -89,7 +84,7 @@ export class Environment {
       }
       return predefined.onGet(this);
     }
-    return this.global.get(address);
+    return undefined;
   }
 
   getArray(name: Variable): Array {
