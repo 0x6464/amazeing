@@ -24,7 +24,6 @@ export type CodeEditorProps = {
   autocomplete?: boolean;
 };
 
-// TODO: Fix button overflow when panel is small
 export function CodeEditor({
   title,
   code,
@@ -81,7 +80,7 @@ export function CodeEditor({
         ]}
         onChange={(value) => setCode(value)}
         basicSetup={{
-          lineNumbers: true,
+          lineNumbers: false,
           searchKeymap: false,
         }}
         style={{
