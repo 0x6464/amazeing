@@ -30,8 +30,12 @@ export const breakpointDisplay = (breakpoints: number[]) =>
     for (const line of breakpoints.sort((a, b) => a - b)) {
       if (!line) continue;
 
-      const lineInfo = state.doc.line(line);
-      builder.add(lineInfo.from, lineInfo.from, marker);
+      try {
+        const lineInfo = state.doc.line(line);
+        builder.add(lineInfo.from, lineInfo.from, marker);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     return [builder.finish()];
